@@ -1,5 +1,6 @@
 package com.redtail.csschallenge;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.redtail.csschallenge.model.MenuItem;
@@ -7,10 +8,10 @@ import com.redtail.csschallenge.model.MenuItem;
 /**
  * OrderManager
  */
-public class OrderManager {
+public final class OrderManager {
     public static final OrderManager THE_INSTANCE = new OrderManager();
     
-    private List<Order> orders;
+    private List<Order> activeOrders = new ArrayList<>();
     
     private OrderManager() {
 
@@ -21,11 +22,18 @@ public class OrderManager {
     }
     
     public Order addOrderForItem( MenuItem item ) {
-
         Order order = new Order( item );
-        orders.add(order);
+        synchronized( this.activeOrders ) {
+            activeOrders.add(order);
+            Kitchen.sharedInstance().newOrderArrived(order);
+        }
 
         return order;
     }
     
+    
+    public void orderCompleted( Order order ) {
+
+    }
+
 }

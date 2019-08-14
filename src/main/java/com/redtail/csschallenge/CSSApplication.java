@@ -9,6 +9,10 @@ public class CSSApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CSSApplication.class, args);
+		Restaurant myRestaurant = Restaurant.sharedInstance();
+		myRestaurant.setName("Cody's Fine Foods");
+		myRestaurant.startTakingOrders();
+		
 	}
 
 }

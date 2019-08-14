@@ -30,4 +30,11 @@ public class MenuItem {
         return decayRate;
     }
 
+    @Override
+    public String toString() {
+        return "MenuItem [decayRate=" + decayRate + ", name=" + name + ", shelfLife=" + shelfLife + ", temp=" + temp
+                + "]";
+    }
+
+    
 }
