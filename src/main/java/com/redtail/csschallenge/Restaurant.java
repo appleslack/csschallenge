@@ -3,6 +3,7 @@ package com.redtail.csschallenge;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redtail.csschallenge.model.MenuItem;
@@ -116,9 +117,10 @@ public class Restaurant {
 
         // Get a random item from the Menu:
         int numItems = this.theMenu.size();
-        int theItem = (int) (Math.random() * numItems);
+        int randomItem = ThreadLocalRandom.current().nextInt(0, numItems);
+
         Object[] keys = theMenu.keySet().toArray();
-        String itemName = (String) keys[theItem];
+        String itemName = (String) keys[randomItem];
         this.orderItemWithName(itemName);
 
         return itemName;
