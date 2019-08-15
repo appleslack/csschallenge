@@ -1,11 +1,8 @@
 package com.redtail.csschallenge;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.naming.NameNotFoundException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redtail.csschallenge.model.MenuItem;

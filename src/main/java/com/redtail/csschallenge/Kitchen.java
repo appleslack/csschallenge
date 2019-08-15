@@ -16,25 +16,31 @@ import java.util.concurrent.LinkedBlockingDeque;
  * pickup.
  */
 public final class  Kitchen {
-    public static final Kitchen THE_INSTANCE = new Kitchen();
+    private static final Kitchen THE_INSTANCE = new Kitchen();
     private int numConcurrentOrders = 0;        // Assuming 1 chef default who can actively cook 4 orders at a time
 
     // The kitchen is only capable of making a finite number of orders at a time (totally arbitray number based on one
     // chef in this particular kitchen).  Orders will first be placed in the queue then removed as
     // resources allow for the next order to be made.
     private BlockingDeque<Order>  queuedOrders;
-
+    private List<OrderStatusChangedListener> orderStatusChangedListeners;
+    
     public static Kitchen sharedInstance() {
         return THE_INSTANCE;
     }
     
     private Kitchen() {
         this.queuedOrders = new LinkedBlockingDeque<>();
+        this.orderStatusChangedListeners = new ArrayList<>();
+        
         this.setNumChefsOnDuty(1);
-
         this.consumeOrders();
     }
  
+    public void registerOrderChangedListener( OrderStatusChangedListener changedListener ) {
+        this.orderStatusChangedListeners.add(changedListener);
+    }
+
     public void setNumChefsOnDuty( int numChefs ) {
         // This number should be validated based on kitchen size and equipemnt, but 
         // outside this scope
@@ -46,6 +52,7 @@ public final class  Kitchen {
         synchronized( this  ) {
             System.out.println("Kitchen:  New order arrived: " + order.getItemName());
             this.queuedOrders.add(order);
+            order.setOrderStatus(OrderStatus.AWAITING_PREP);
         }
     }
 
@@ -64,10 +71,9 @@ public final class  Kitchen {
                     synchronized(this.queuedOrders) {
                         System.out.println( "Waiting for an order... ");
                         order = this.queuedOrders.take();
-                        System.out.println( "Making order " + order );
                     }
-                    // Now fullfill (make) order
-                    this.fullfillOrder( order );
+                    // Now Prepare (make) order
+                    this.prepareOrder( order );
                 }
             } catch (Exception e) {
                 System.out.println("Exception while consuming an order: " + e );
@@ -77,10 +83,28 @@ public final class  Kitchen {
         executor.execute(kitchenOrderFullfiller);
     }
 
-    public void fullfillOrder( Order order ) {
-        order.setFullfilled();
+    public void prepareOrder( Order order ) {
+        order.setOrderStatus(OrderStatus.PREPARING);
 
-        System.out.println( "The following order has been made - sending to shelf: " + order );
-        // ShelfManager.sharedInstance().putOrderOnShelf(order);
+        // Sleep the preparer thread to simulate that the kitchen takes at least _SOME_ time
+        // to make an order.  Yes - I know - it's supposed to be instantaneous but that's not fun.
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println( "No longer waiting - jeez: " + e);
+        }
+
+        order.setOrderStatus(OrderStatus.PREPARED);
+        // Send notification that the order has changed.  I'm doing this in the kitchen
+        // prep thread, so I don't mind sending like this here.
+        // Perhaps I should always send notifications when the order status changes, but right now
+        // I don't have a good reason to do this.  If this is necessary, move this to another method:
+        sendOrderChangedNotification( order, OrderStatus.PREPARED);
+    }
+
+    public void sendOrderChangedNotification( Order order, OrderStatus status ) {
+        for (OrderStatusChangedListener listener : this.orderStatusChangedListeners ) {
+            listener.orderStatusChanged(order, status);
+        }
     }
 }
