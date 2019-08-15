@@ -50,7 +50,7 @@ public class Restaurant {
 
                 theMenu.put(mi.getName(), mi );
             }
-            System.out.println("The Items Are" + theMenu );
+            System.out.println("Read " + theMenu.size() + " items on the menu" );
         } catch (Exception e) {
             System.out.println( "Exception reading MenuItems - " + e );
         }
@@ -119,7 +119,6 @@ public class Restaurant {
     // order has been put on one of the outgoing shelves (via the Order Manager),
     // the delivery can be scheduled (via DeliveryScheduler)
     public void orderItemWithName( String itemName ) throws Exception {
-        System.out.println("Restaurant - Ordering item: " + itemName);
 
         if( this.restaurantOpen ) {
             MenuItem item = this.getMenuItem(itemName);

@@ -37,7 +37,7 @@ public class PeriodicTask {
             p = p * r.nextDouble();
             k++;
         } while (p > L);
-        return k - 1;
+        return Math.max(k - 1, 1);
     }
 
     public void setLambda( double lambda ) {
@@ -52,10 +52,26 @@ public class PeriodicTask {
             int nextRate = this.getPoissonRandom();
             System.out.println( "New poisson rate = " + nextRate );
 
-            // For now - just call callback
-            if( this.callback != null ) {
-                callback.runTask();
-            }
+            int delayPerIteration = 800 / nextRate;    // number of milliseconds between tasks
+            Runnable runCallbackTask = () -> {
+            System.out.println( "*** Starting runCallbackTask" );
+
+                for (int i = 0; i < nextRate; i++) {
+                    if( this.callback != null ) {
+                        System.out.println( "Running task " + (i + 1) + " of " + nextRate ); 
+                        // callback.runTask();
+                    }
+    
+                    try {
+                        Thread.sleep(delayPerIteration);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            System.out.println( "*** Finished runCallbackTask" );
+
+            };
+            new Thread(runCallbackTask).start();
         };
 
         sFuture = periodicExecutor.scheduleAtFixedRate(orderTask, 1, 1, TimeUnit.SECONDS);
