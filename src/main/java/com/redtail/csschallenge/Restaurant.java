@@ -19,6 +19,7 @@ public class Restaurant {
     // private DeliveryManager dm;
     private Boolean restaurantOpen = false;
     private HashMap<String, MenuItem> theMenu;
+    private PeriodicTask orderSim = null;
 
     private Restaurant()  {
         this.readMenuItems();
@@ -82,12 +83,36 @@ public class Restaurant {
     }
 
     // Start the automatic order processor 
-    public void startAutoOrderProcessor() {
-        // AutoOrderProcessor.sharedInstance().startSchedulingOrders();
+    public boolean startAutoOrderProcessor() {
+        boolean success = false;
+
+        if( orderSim == null ) {
+            PeriodicTaskCallback cb = () -> {
+                try {
+                    this.orderRandomItem();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+
+            orderSim = new PeriodicTask(3.5, cb );
+            orderSim.start();
+            success = true;
+        }
+        else {
+            System.out.println("Order simulator already started..." );
+        }
+        return success;
     }
 
-    public void stopAutoOrderProcessor() {
-        // AutoOrderProcessor.sharedInstance().stopSchedulingOrders();
+    public boolean stopAutoOrderProcessor() {
+        boolean success = false;
+        if( orderSim != null ) {
+            orderSim.stop();
+            orderSim = null;
+            success = true;
+        }
+        return success;
     }
 
     // Given an item, ask the order manager for a new order.  Once the
