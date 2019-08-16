@@ -1,0 +1,94 @@
+Example status JSON returned when getting current shelf status:
+
+{
+  "cold_shelf": {
+    "num_orders": 10,
+    "max_orders": 15,
+    "active_orders": [
+      {
+        "item": "Kale Salad",
+        "prep_date": "2019-08-15T21:18:38.076Z",
+        "normalized_decay": 139
+      },
+      {
+        "item": "Kale Salad",
+        "prep_date": "2019-08-15T21:18:38.076Z",
+        "normalized_decay": 139
+      }
+    ]
+  },
+  "hot_shelf": {
+    "num_orders": 10,
+    "max_orders": 15,
+    "active_orders": [
+      {
+        "item": "Pizza",
+        "prep_date": "2019-08-15T21:18:38.076Z",
+        "normalized_decay": 139
+      },
+      {
+        "item": "Kale Salad",
+        "prep_date": "2019-08-15T21:18:38.077Z",
+        "normalized_decay": 139
+      }
+    ]
+  },
+  "frozen_shelf": {
+    "num_orders": 1,
+    "max_orders": 15,
+    "active_orders": [
+      {
+        "item": "Strawberry Banana Split",
+        "prep_date": "2019-08-15T21:18:38.077Z",
+        "normalized_decay": 139
+      },
+      {
+        "item": "Kale Salad",
+        "prep_date": "2019-08-15T21:18:38.077Z",
+        "normalized_decay": 139
+      }
+    ]
+  },
+  "overflow_shelf": {
+    "num_orders": 0,
+    "max_orders": 15
+  }
+}
+
+
+cold_shelf
+  num_orders n = 10
+  max_orders n = 15
+  active_orders[0]
+    item s = Kale Salad
+    prep_date d
+    normalized_decay n = 139
+  active_orders[1]
+    item s = Kale Salad
+    prep_date d
+    normalized_decay n = 139
+hot_shelf
+  num_orders n = 10
+  max_orders n = 15
+  active_orders[0]
+    item s = Pizza
+    prep_date d
+    normalized_decay n = 139
+  active_orders[1]
+    item s = Kale Salad
+    prep_date d
+    normalized_decay n = 139
+frozen_shelf
+  num_orders n = 1
+  max_orders n = 15
+  active_orders[0]
+    item s = Strawberry Banana Split
+    prep_date d
+    normalized_decay n = 139
+  active_orders[1]
+    item s = Kale Salad
+    prep_date d
+    normalized_decay n = 139
+overflow_shelf
+  num_orders n = 0
+  max_orders n = 15

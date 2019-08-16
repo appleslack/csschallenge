@@ -60,14 +60,19 @@ public final class DeliveryManager {
 
         Date now = new Date();
         for (Order order : orders ) {
+            Date prepDate = order.getOrderPreparedDate();
+            
+            // For orders not prepared or orders already in the trash, no further processing needed.
+            if( prepDate == null || order.getOrderStatus() == OrderStatus.TRASHED ) {
+                continue;
+            }
             int shelfLife = order.getItem().getShelfLife();
             double decayRate = order.getItem().getDecayRate();
             // Decay rate doubles for items on overflow shelf
             if( shelf.shelfType() == DeliveryShelfType.OVERFLOW ) {
                 decayRate *= 2.0;
             }
-            Date prepDate = order.getOrderPreparedDate();
-            int orderAge = (int)(prepDate.getTime() - now.getTime()) / 1000;
+            int orderAge = (int)(now.getTime() - prepDate.getTime()) / 1000;
             int decay = (shelfLife - orderAge) - (int)(decayRate * orderAge);
             int normalizedDecay = decay/ shelfLife;
 
@@ -77,6 +82,7 @@ public final class DeliveryManager {
                 if( trashOrders == null ) {
                     trashOrders = new ArrayList<>();
                 }
+                trashedOrders.add(order);
             }
 
             // This is used to display the status of orders on the shelf.

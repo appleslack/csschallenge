@@ -44,11 +44,7 @@ public class Order {
     public long getOrderNumber() {
         return orderNumber;
     }
-    public void setFullfilled() {
-        setOrderStatus( OrderStatus.PREPARED );
-        this.orderPreparedDate = new Date();
-    }
-    
+
     public Date getOrderPreparedDate() {
         return this.orderPreparedDate;
     }
@@ -56,6 +52,9 @@ public class Order {
     public void setOrderStatus( OrderStatus status ) {
         this.status = status;
         System.out.println(this + ": Order status changed to " + status);
+        if( status == OrderStatus.PREPARED ) {
+            this.orderPreparedDate = new Date();
+        }
     }
 
     public OrderStatus getOrderStatus() {
