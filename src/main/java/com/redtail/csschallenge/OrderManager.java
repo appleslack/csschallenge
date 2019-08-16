@@ -14,7 +14,7 @@ public final class OrderManager implements OrderStatusChangedListener {
     private List<Order> activeOrders = new ArrayList<>();
 
     private OrderManager() {
-
+        Kitchen.sharedInstance().registerOrderChangedListener(this);
     }
 
     public static OrderManager sharedInstance() {
@@ -22,7 +22,8 @@ public final class OrderManager implements OrderStatusChangedListener {
     }
 
     public Order addOrderForItem(MenuItem item) {
-        Order order = new Order(item);
+        Order order = OrderFactory.createOrderForItem(item);
+        
         synchronized (this.activeOrders) {
             activeOrders.add(order);
             Kitchen.sharedInstance().newOrderArrived(order);
@@ -36,11 +37,12 @@ public final class OrderManager implements OrderStatusChangedListener {
     }
 
     @Override
+
     public void orderStatusChanged(Order order, OrderStatus newStatus) {
         if( newStatus == OrderStatus.PREPARED ) {
             // Send the order to the Delivery Manager who will now have ownership of
             // the order as the kitchen is now finished with it.
-            DeliveryManager.sharedInstance().placeOrderOnShelfAndScheduleDelivery(order);
+            DeliveryManager.sharedInstance().placeOrderOnShelfForDelivery(order);
             
         }
     }

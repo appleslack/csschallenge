@@ -12,6 +12,8 @@ public class Order {
     private Date        orderDate;
     private Date        orderPreparedDate;
     OrderStatus         status;
+    private long        orderNumber;
+    private int         normalizedDecay = -1;
 
     public Order(MenuItem item) {
         this.item = item;
@@ -30,11 +32,18 @@ public class Order {
     public Date getOrderDate() {
         return orderDate;
     }
-
+    
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
+    public void setOrderNumber( long number ) {
+        this.orderNumber = number;
+    }
+
+    public long getOrderNumber() {
+        return orderNumber;
+    }
     public void setFullfilled() {
         setOrderStatus( OrderStatus.PREPARED );
         this.orderPreparedDate = new Date();
@@ -46,18 +55,24 @@ public class Order {
 
     public void setOrderStatus( OrderStatus status ) {
         this.status = status;
-        System.out.println(this.getItemName() + ": Order status changed to " + status);
+        System.out.println(this + ": Order status changed to " + status);
     }
 
     public OrderStatus getOrderStatus() {
         return this.status;
     }
     
+    public void setNormalizedDecay(int normalizedDecay) {
+        this.normalizedDecay = normalizedDecay;
+    }
     
+    public int getNormalizedDecay() {
+        return normalizedDecay;
+    }
+
     @Override
     public String toString() {
-        return "Order [item=" + item + ", orderDate=" + orderDate + ", orderStatus=" + status 
-                + ", orderPreparedDate=" + orderPreparedDate + "]";
+        return "Order number " + orderNumber + " : " + item.getName();
     }
 
     @Override
@@ -66,6 +81,8 @@ public class Order {
         int result = 1;
         result = prime * result + ((item == null) ? 0 : item.getName().hashCode());
         result = prime * result + ((orderDate == null) ? 0 : orderDate.hashCode());
+        result = prime * result + (int)orderNumber;
+
         return result;
     }
 

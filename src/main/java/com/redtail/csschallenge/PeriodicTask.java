@@ -24,8 +24,6 @@ public class PeriodicTask {
     public PeriodicTask(double lambda, PeriodicTaskCallback cb) {
         this.setLambda(lambda);
         callback = cb;
-
-        // periodicWakeThread = new Thread();
     }
 
     // See: https://en.wikipedia.org/wiki/Poisson_distribution#Generating_Poisson-distributed_random_variables
@@ -50,16 +48,15 @@ public class PeriodicTask {
     public void start() {
         Runnable orderTask = () -> {
             int nextRate = this.getPoissonRandom();
-            System.out.println( "New poisson rate = " + nextRate );
+            System.out.println( "Ordering " + nextRate + " orders this cycle...");
 
             int delayPerIteration = 800 / nextRate;    // number of milliseconds between tasks
             Runnable runCallbackTask = () -> {
-            System.out.println( "*** Starting runCallbackTask" );
 
                 for (int i = 0; i < nextRate; i++) {
                     if( this.callback != null ) {
-                        System.out.println( "Running task " + (i + 1) + " of " + nextRate ); 
-                        // callback.runTask();
+                        // System.out.println( "Running task " + (i + 1) + " of " + nextRate ); 
+                        callback.runTask();
                     }
     
                     try {
@@ -68,8 +65,6 @@ public class PeriodicTask {
                         break;
                     }
                 }
-            System.out.println( "*** Finished runCallbackTask" );
-
             };
             new Thread(runCallbackTask).start();
         };

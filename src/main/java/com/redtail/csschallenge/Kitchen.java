@@ -49,41 +49,40 @@ public final class  Kitchen {
 
     // We have a new incoming order - put on the queuedOrders for "later" fullfillment
     public void newOrderArrived(Order order ) {
-        synchronized( this  ) {
-            System.out.println("Kitchen:  New order arrived: " + order.getItemName());
             this.queuedOrders.add(order);
             order.setOrderStatus(OrderStatus.AWAITING_PREP);
-        }
     }
 
     public void consumeOrders() {
         // Note:  We're assuming that the number of chefs in the kitchen does not change
         // over the life of the running process.  Making this dynamic would be a bit more
         // complicated but it's not in the scope.
-        ExecutorService executor = Executors.newFixedThreadPool(this.numConcurrentOrders);
+        ExecutorService executor = Executors.newFixedThreadPool( this.numConcurrentOrders );
 
         // Create the consumer task which deques orders, makes them then
         // puts them on the shelf.
         Runnable kitchenOrderFullfiller = () -> {
             try {
                 while( true ) {
-                    Order order = null;
-                    synchronized(this.queuedOrders) {
-                        System.out.println( "Waiting for an order... ");
-                        order = this.queuedOrders.take();
-                    }
+                    Order order = this.queuedOrders.take();
                     // Now Prepare (make) order
-                    this.prepareOrder( order );
+                    if( order != null ) {
+                        this.prepareOrder( order );
+                    }
                 }
             } catch (Exception e) {
                 System.out.println("Exception while consuming an order: " + e );
             }
         };
-        
-        executor.execute(kitchenOrderFullfiller);
+
+        for( int inx=0; inx<this.numConcurrentOrders; inx++ ) {
+            executor.execute(kitchenOrderFullfiller);
+        }
     }
 
     public void prepareOrder( Order order ) {
+        // System.out.println( "Preparing order on thread " + Thread.currentThread().getId());
+
         order.setOrderStatus(OrderStatus.PREPARING);
 
         // Sleep the preparer thread to simulate that the kitchen takes at least _SOME_ time

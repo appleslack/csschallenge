@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class OrderController {
+public class RESTaurantController {
 
     private static final String PERIODIC_ORDERING_COULD_NOT_BE_STARTED = "Periodic ordering could not be started";
     private static final String STARTED_PERIODIC_ORDERING = "Started periodic ordering...";
@@ -46,6 +46,11 @@ public class OrderController {
         else {
             return PERIODIC_ORDERING_COULD_NOT_BE_STOPPED;
         }
+    }
+
+    @RequestMapping("/shelves/status")
+    public String retrieveShelfStatusInfo() {
+        return "";
     }
 
 }

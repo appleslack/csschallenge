@@ -6,5 +6,6 @@ public enum OrderStatus {
     PREPARING,          // Actively preparing in kitchen
     PREPARED,           // The kitchen has finished preparing
     ON_DELIVERY_SHELF,  // Waiting to be pickup up for delivery.  Decay rate started.
-    FULLFILLED          // Delivery successful (archived order)          
+    DELIVERED,          // Delivery successful (archived order)          
+    TRASHED            // The order has been trashed while waiting for delivery (or there's no more room on overflow shelf)
 }

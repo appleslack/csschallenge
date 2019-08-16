@@ -11,8 +11,10 @@ public class DeliveryShelf {
     private int                 capacity = 0;
     private List<Order>         ordersOnShelf = null;
     private final String        shelfName;
+    private DeliveryShelfType   shelfType;
 
     public DeliveryShelf( DeliveryShelfType type ) {
+        shelfType = type;
 
         switch (type) {
             case HOT:
@@ -45,11 +47,11 @@ public class DeliveryShelf {
             if( this.ordersOnShelf.size() < this.capacity ) {
                 this.ordersOnShelf.add(order);
                 successful = true;
-                System.out.println(order.getItemName() + ": Added " + order.getItemName() + " to " + shelfName() + " shelf" );
+                System.out.println(order + ": Added " + order + " to " + shelfName() + " shelf" );
             }
         }
         if( !successful ) {
-            System.out.println(order.getItemName() + ": Cannot add " + order.getItemName() + " to " + shelfName() + " shelf - over capacity" );
+            System.out.println(order + ": Cannot add " + order + " to " + shelfName() + " shelf - over capacity" );
         }
 
         return successful;
@@ -65,6 +67,14 @@ public class DeliveryShelf {
             System.out.println(order.getItemName() + ": Removed " + order.getItemName() + " from " + shelfName() + " shelf" );
         }
 
+    }
+
+    public DeliveryShelfType shelfType() {
+        return shelfType;
+    }
+    
+    public List<Order> getOrdersOnShelf() {
+        return this.ordersOnShelf;
     }
 
     public String shelfName() {
