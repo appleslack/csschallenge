@@ -62,27 +62,6 @@ class RestaurantMenu extends Component {
                 {/* <Container className={classes.Container}> */}
                 <div className={classes.menuGridContainer}>
                     {menugrid_Grid}
-                    {/* <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 2"/>
-                    <RestaurantMenuItem name="Item 3"/>
-                    <RestaurantMenuItem name="Item 4"/>
-                    <RestaurantMenuItem name="Item 5"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 10"/>
-                    <RestaurantMenuItem name="Item 11"/>
-                    <RestaurantMenuItem name="Item 12"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
-                    <RestaurantMenuItem name="Item 1"/>
- */}
                 </div>
             </React.Fragment>
         );

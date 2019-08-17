@@ -10,9 +10,9 @@ const toolbar = (props) => {
   return (
     <header className={classes.Toolbar}>
       <Logo />
-      <nav>
+      {/* <nav>
         <NavigationItems />
-      </nav>
+      </nav> */}
     </header>
   );
 }

@@ -1,0 +1,18 @@
+
+.OrderShelfContainer {
+    display: grid;
+    grid-template-columns: repeat( 3, 1fr);
+    grid-gap: 1em;
+    grid-auto-rows: 200px;
+    background-color: lightblue;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/* .OrderShelfContainer > div {
+    background-color: white;
+} */
+
+.OrderShelf {
+    background-color: white;
+}

@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import RestaurantMenu from '../../components/TheMenu/RestaurantMenu';
+import OrderShelf from '../../components/OrderShelf/OrderShelf';
+import classes from '../../components/OrderShelf/OrderShelf.module.css';
 
 // import Modal from '../../components/UI/Modal/Modal';
 import StatusMonitor from '../../components/Monitors/StatusMonitor';
@@ -21,6 +23,7 @@ class RestaurantMonitor extends Component {
       connecting : false,
       error : null,
       menu : null,
+      shelfStats: {hot:null, cold:null, frozen:null},
     }
     return state;
   }
@@ -49,9 +52,14 @@ class RestaurantMonitor extends Component {
   render () {
     return (
       <React.Fragment>
-        {/* <Monitors currentState={this.state}/> */}
         <RestaurantMenu menu={this.state.menu}/>
-        {/* <Shelves shelveStats={this.state.shelfStats}/> */}
+        <div className={classes.OrderShelfContainer}>
+          {/* Note:  Break up shelves into type */}
+          <OrderShelf className={classes.OrderShelf} type="Cold" shelveStats={this.state.shelfStats.hot}/>
+          <OrderShelf className={classes.OrderShelf} type="Hot" shelveStats={this.state.shelfStats.cold}/>
+          <OrderShelf className={classes.OrderShelf} type="Frozen" shelveStats={this.state.shelfStats.frozen}/>
+        </div>
+  
       </React.Fragment>
     );
   }
