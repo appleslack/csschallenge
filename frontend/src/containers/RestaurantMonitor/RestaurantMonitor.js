@@ -2,7 +2,7 @@
 
 import React, {Component} from 'react';
 import axios from 'axios';
-import TheMenu from '../../components/TheMenu/TheMenu';
+import RestaurantMenu from '../../components/TheMenu/RestaurantMenu';
 
 // import Modal from '../../components/UI/Modal/Modal';
 import StatusMonitor from '../../components/Monitors/StatusMonitor';
@@ -50,8 +50,8 @@ class RestaurantMonitor extends Component {
     return (
       <React.Fragment>
         {/* <Monitors currentState={this.state}/> */}
-        <TheMenu menu={this.state.menu}/>
-
+        <RestaurantMenu menu={this.state.menu}/>
+        {/* <Shelves shelveStats={this.state.shelfStats}/> */}
       </React.Fragment>
     );
   }

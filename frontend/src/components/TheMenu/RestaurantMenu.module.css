@@ -1,0 +1,21 @@
+
+
+/* Setup the grid here */
+.menuGridContainer {
+    margin-top: 2px;
+    display: grid;
+    /* grid-template-columns: 1fr 1fr */
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 2px;
+    padding: 10px;
+    grid-auto-rows: 24px;
+
+}
+/* All the direct decendents of menuGridContainer divs get this style */
+.menuGridContainer > div {
+    background: #eee;
+    font-size: .4em;
+    /* padding-left: 2px;
+    padding-right: 10px; */
+    
+}

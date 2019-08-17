@@ -15,7 +15,6 @@ function App() {
         <Layout>
           <RestaurantMonitor/>
         </Layout>
-        <Button >Open Restaurant</Button>
       </header>
     </div>
   );

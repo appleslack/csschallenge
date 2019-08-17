@@ -1,0 +1,18 @@
+
+.RestaurantMenuItem {
+    font-size: .5em;
+    color: black;
+}
+.RestaurantMenuItem:hover {
+    background-color: #AC9980;
+}
+
+.hot {
+    color: red;
+}
+.cold {
+    color: #5C9210;
+}
+.frozen {
+    color:blue;
+}
