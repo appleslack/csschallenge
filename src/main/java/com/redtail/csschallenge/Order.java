@@ -13,7 +13,7 @@ public class Order {
     private Date        orderPreparedDate;
     OrderStatus         status;
     private long        orderNumber;
-    private int         normalizedDecay = -1;
+    private double         normalizedDecay = 0.0;
 
     public Order(MenuItem item) {
         this.item = item;
@@ -61,11 +61,11 @@ public class Order {
         return this.status;
     }
     
-    public void setNormalizedDecay(int normalizedDecay) {
+    public void setNormalizedDecay(double normalizedDecay) {
         this.normalizedDecay = normalizedDecay;
     }
     
-    public int getNormalizedDecay() {
+    public double getNormalizedDecay() {
         return normalizedDecay;
     }
 

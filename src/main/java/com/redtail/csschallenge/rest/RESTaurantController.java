@@ -3,6 +3,7 @@ package com.redtail.csschallenge.rest;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.redtail.csschallenge.DeliveryManager;
 import com.redtail.csschallenge.Restaurant;
 
 import org.springframework.core.io.ClassPathResource;
@@ -12,6 +13,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+/*
+ * RESTaurantController
+ * Note: This is just a quick-n-easy implmentation of a RESTful API for the
+ * frontend and for quick testing (Use curl to start & stop auto ordering for example) which
+ * may or may not be wired into the frontend.  We'll see...
+ * 
+ */
 
 @RestController
 public class RESTaurantController {
@@ -56,9 +65,15 @@ public class RESTaurantController {
         }
     }
 
-    @RequestMapping("/shelves/status")
+    @RequestMapping(
+        value="/shelves/status",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public String retrieveShelfStatusInfo() {
-        return "";
+        String json = DeliveryManager.sharedInstance().getShelfStatusInfo();
+
+        return json;
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

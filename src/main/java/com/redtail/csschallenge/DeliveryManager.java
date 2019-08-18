@@ -2,9 +2,15 @@ package com.redtail.csschallenge;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.springframework.boot.jackson.JsonObjectSerializer;
 
 /**
  * DeliveryManager
@@ -23,32 +29,61 @@ public final class DeliveryManager {
     private final DeliveryShelf   coldShelf     = new DeliveryShelf(DeliveryShelfType.COLD);
     private final DeliveryShelf   frozenShelf   = new DeliveryShelf(DeliveryShelfType.FROZEN);
     private final DeliveryShelf   overflowShelf = new DeliveryShelf(DeliveryShelfType.OVERFLOW);
-    private final List<Order>     trashedOrders = new ArrayList<>();
     
     private ExecutorService driverThreadPool = null;
 
     private DeliveryManager() {
         Runnable decayUpdater = () -> {
             while(true) {
-                // Don't let shelves be modified while doing this operation
-                synchronized(this) {
-                    decayOrdersOnShelf(hotShelf);
-                    decayOrdersOnShelf(coldShelf);
-                    decayOrdersOnShelf(frozenShelf);
-                    decayOrdersOnShelf(overflowShelf);
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                try {
+                    // Don't let shelves be modified while doing this operation
+                    synchronized(hotShelf) {
+                        decayOrdersOnShelf(hotShelf);
                     }
+                    synchronized(coldShelf) {
+                        decayOrdersOnShelf(coldShelf);
+                    }
+                    synchronized(frozenShelf) {
+                        decayOrdersOnShelf(frozenShelf);
+                    }
+                    synchronized(overflowShelf) {
+                        decayOrdersOnShelf(overflowShelf);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println( "Exception caught while decaying orders: " + e);
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
             }
         };
 
         new Thread(decayUpdater).start();
     }
+
+    // 
+    public String getShelfStatusInfo() {
+        HashMap<String, List<Order>> shelfInfoMap = new HashMap<>();
+        shelfInfoMap.put( "hot", hotShelf.getOrdersOnShelf());
+        shelfInfoMap.put( "cold", coldShelf.getOrdersOnShelf());
+        shelfInfoMap.put( "frozen", frozenShelf.getOrdersOnShelf());
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = null;
+        try {
+            jsonString = mapper.writeValueAsString(shelfInfoMap);
+        }
+        catch( Exception e ) {
+            System.out.println( "Exception while writing JSON String: " + e );
+        }
+
+        return jsonString;
+    }
+
     /*
     * Iterate through orders on the given shelf and update their decay value.  Return
     * orders that have a decay indicating they should be trashed (<=0)
@@ -74,7 +109,7 @@ public final class DeliveryManager {
             }
             int orderAge = (int)(now.getTime() - prepDate.getTime()) / 1000;
             int decay = (shelfLife - orderAge) - (int)(decayRate * orderAge);
-            int normalizedDecay = decay/ shelfLife;
+            double normalizedDecay = (double)decay/(double)shelfLife;
 
             if( decay <= 0 ) {
                 order.setOrderStatus(OrderStatus.TRASHED);
@@ -82,7 +117,7 @@ public final class DeliveryManager {
                 if( trashOrders == null ) {
                     trashOrders = new ArrayList<>();
                 }
-                trashedOrders.add(order);
+                trashOrders.add(order);
             }
 
             // This is used to display the status of orders on the shelf.
@@ -91,11 +126,10 @@ public final class DeliveryManager {
 
         if( trashOrders != null ) {
             for (Order orderToTrash : trashOrders) {
-                shelf.removeOrderFromShelf(orderToTrash);
-                trashOrders.add(orderToTrash);
-                System.out.println( orderToTrash + " placed in trash!");
+                handleOrderFinished(orderToTrash);
             }
         }
+        
     }
 
     // When the kitchen is open we should start scheduling drivers
@@ -165,9 +199,27 @@ public final class DeliveryManager {
         synchronized(order) {
             if( order.getOrderStatus() == OrderStatus.TRASHED ) {
                 // Remove from list of items in the trash to clean up.
-
+                DeliveryShelf shelf = null;
+                switch (order.getItem().getDeliveryShelf()) {
+                    case COLD:
+                        shelf = coldShelf;
+                        break;
+                    case HOT:
+                        shelf = hotShelf;
+                        break;
+                    case FROZEN:
+                        shelf = frozenShelf;
+                        break;
+                    default:
+                        shelf = overflowShelf;
+                        break;
+                }
+                if( shelf != null ) {
+                    synchronized(shelf) {
+                        shelf.removeOrderFromShelf(order);
+                    }
+                }
             }
-            // Remove from the shelf 
             
         }
     }

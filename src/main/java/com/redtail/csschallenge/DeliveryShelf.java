@@ -57,7 +57,7 @@ public class DeliveryShelf {
         return successful;
     }
 
-    public void removeOrderFromShelf( Order order ) {
+    public boolean removeOrderFromShelf( Order order ) {
         boolean removed = false;
 
         synchronized( this.ordersOnShelf ) {
@@ -66,7 +66,7 @@ public class DeliveryShelf {
         if( removed ) {
             System.out.println(order.getItemName() + ": Removed " + order.getItemName() + " from " + shelfName() + " shelf" );
         }
-
+        return removed;
     }
 
     public DeliveryShelfType shelfType() {
