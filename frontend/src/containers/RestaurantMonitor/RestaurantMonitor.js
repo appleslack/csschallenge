@@ -35,7 +35,20 @@ class RestaurantMonitor extends Component {
         this.setState( {menu: response.data});
       });
 
-    console.log('RestaurantMonitor componentDidMount');
+    axios.get( 'http://localhost:8000/restaurant/shelfStats')
+      .then( (response) => {
+        console.log( "Cold Shelf Stats: " + response.data.cold);
+        console.log( "Hot Shelf Stats: " + response.data.hot);
+        console.log( "Frozen Shelf Stats: " + response.data.frozen);
+        if( response.data.frozen.length != 0 ) {
+          response.data.frozen.map( (item) => {
+            console.log(item.item.name);
+          });
+        }
+        this.setState( {shelfStats: response.data});
+      });
+
+      console.log('RestaurantMonitor componentDidMount');
 
     setTimeout( () => {
       this.connectToRestaurant();
@@ -54,10 +67,10 @@ class RestaurantMonitor extends Component {
       <React.Fragment>
         <RestaurantMenu menu={this.state.menu}/>
         <div className={classes.OrderShelfContainer}>
-          {/* Note:  Break up shelves into type */}
-          <OrderShelf className={classes.OrderShelf} type="Cold" shelveStats={this.state.shelfStats.hot}/>
-          <OrderShelf className={classes.OrderShelf} type="Hot" shelveStats={this.state.shelfStats.cold}/>
-          <OrderShelf className={classes.OrderShelf} type="Frozen" shelveStats={this.state.shelfStats.frozen}/>
+          {/* Note:  Break up shelfes into type */}
+          <OrderShelf className={classes.OrderShelf} type="HOT" shelfStats={this.state.shelfStats.hot}/>
+          <OrderShelf className={classes.OrderShelf} type="COLD" shelfStats={this.state.shelfStats.cold}/>
+          <OrderShelf className={classes.OrderShelf} type="FROZEN" shelfStats={this.state.shelfStats.frozen}/>
         </div>
   
       </React.Fragment>

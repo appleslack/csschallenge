@@ -3,7 +3,7 @@
     display: grid;
     grid-template-columns: repeat( 3, 1fr);
     grid-gap: 1em;
-    grid-auto-rows: 200px;
+    grid-auto-rows: minmax(200px, auto);
     background-color: lightblue;
     margin-left: 10px;
     margin-right: 10px;

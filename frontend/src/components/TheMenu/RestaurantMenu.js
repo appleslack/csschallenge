@@ -33,12 +33,10 @@ class RestaurantMenu extends Component {
         const rowitems = [];
         let start = 0;
         let end = numCols;
-        // console.log(this.props.menu.slice(0,5));
 
         const cols = [];
         for (let i = 0; i < numRows; i++) {
             const row = items.slice(start, end);
-            console.log(row);
             cols[i] = row.map( (item) => {
                 return (<Col  className={classes.Col}>{item}</Col>);
             });

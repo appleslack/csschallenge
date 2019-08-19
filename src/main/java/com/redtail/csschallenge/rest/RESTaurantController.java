@@ -65,8 +65,9 @@ public class RESTaurantController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(
-        value="/shelves/status",
+        value="/restaurant/shelfStats",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
