@@ -8,8 +8,8 @@ public class MenuItem {
 
     private final int shelfLife;
     private final double decayRate;
-    private final DeliveryShelfType shelf;
     private final String shelfName;
+    private final DeliveryShelfType defaultShelf;
 
     public MenuItem(String name, String shelfName, int shelfLife, double decayRate) {
         this.name = name;
@@ -19,23 +19,23 @@ public class MenuItem {
 
         switch (shelfName) {
             case "hot":
-                this.shelf = DeliveryShelfType.HOT;
+                this.defaultShelf = DeliveryShelfType.HOT;
                 break;
             case "cold":
-                this.shelf = DeliveryShelfType.COLD;
+                this.defaultShelf = DeliveryShelfType.COLD;
                 break;
              case "frozen":
-                this.shelf = DeliveryShelfType.FROZEN;
+                this.defaultShelf = DeliveryShelfType.FROZEN;
                 break;
         
             default:
-                this.shelf = DeliveryShelfType.OVERFLOW;
+                this.defaultShelf = DeliveryShelfType.OVERFLOW;
                 break;
         }
     }
 
-    public DeliveryShelfType getDeliveryShelf() {
-        return shelf;
+    public DeliveryShelfType getDefaultShelf() {
+        return defaultShelf;
     }
 
     public String getName() {

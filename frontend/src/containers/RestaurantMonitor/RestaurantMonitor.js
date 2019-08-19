@@ -37,9 +37,6 @@ class RestaurantMonitor extends Component {
 
     axios.get( 'http://localhost:8000/restaurant/shelfStats')
       .then( (response) => {
-        console.log( "Cold Shelf Stats: " + response.data.cold);
-        console.log( "Hot Shelf Stats: " + response.data.hot);
-        console.log( "Frozen Shelf Stats: " + response.data.frozen);
         if( response.data.frozen.length != 0 ) {
           response.data.frozen.map( (item) => {
             console.log(item.item.name);
@@ -72,7 +69,9 @@ class RestaurantMonitor extends Component {
           <OrderShelf className={classes.OrderShelf} type="Cold Shelf" shelfStats={this.state.shelfStats.cold}/>
           <OrderShelf className={classes.OrderShelf} type="Frozen" shelfStats={this.state.shelfStats.frozen}/>
         </div>
-  
+        <div className={classes.OrderShelfArea}>
+          <OrderShelf className={classes.OrderShelf} type="Overflow" shelfStats={this.state.shelfStats.overflow}/>
+        </div>
       </React.Fragment>
     );
   }

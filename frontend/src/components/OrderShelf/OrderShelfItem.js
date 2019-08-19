@@ -16,7 +16,7 @@ const OrderShelfItem = (props) => {
         <React.Fragment>
         <div className={classes.OrderShelfItem}>
             <p className={classes.OrderShelfItemName}>{props.item.orderNumber} : {props.item.itemName}</p>
-            <p>Decay: {props.item.normalizedDecay}</p>
+            <p>Decay: {props.item.normalizedDecay.toFixed(2)}</p>
         </div>
         </React.Fragment>
     )

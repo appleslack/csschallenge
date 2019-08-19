@@ -39,9 +39,9 @@ public class Restaurant {
         File jsonSource = new File(fn);
 
         try {
-            List<HashMap> items = mapper.readValue(jsonSource, List.class);
+            List<HashMap<String, Object>> items = mapper.readValue(jsonSource, List.class);
             theMenu = new HashMap<>();
-            for (HashMap item : items) {
+            for (HashMap<String, Object> item : items) {
                 MenuItem mi = new MenuItem(
                         item.get("name").toString(), 
                         item.get("temp").toString(), 

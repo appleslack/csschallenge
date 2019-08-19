@@ -14,11 +14,13 @@ public class Order {
     OrderStatus         status;
     private long        orderNumber;
     private double         normalizedDecay = 0.0;
+    private DeliveryShelfType deliveryShelf;
 
     public Order(MenuItem item) {
         this.item = item;
         this.orderDate = new Date();
         this.status = OrderStatus.ORDER_CREATED;
+        this.deliveryShelf = DeliveryShelfType.NOT_ASSIGNED;
     }
 
     public MenuItem getItem() {
@@ -60,13 +62,21 @@ public class Order {
     public OrderStatus getOrderStatus() {
         return this.status;
     }
+
+    public double getNormalizedDecay() {
+        return normalizedDecay;
+    }
     
     public void setNormalizedDecay(double normalizedDecay) {
         this.normalizedDecay = normalizedDecay;
     }
     
-    public double getNormalizedDecay() {
-        return normalizedDecay;
+    public DeliveryShelfType getDeliveryShelf() {
+        return deliveryShelf;
+    }
+
+    public void setDeliveryShelf(DeliveryShelfType deliveryShelf) {
+        this.deliveryShelf = deliveryShelf;
     }
 
     @Override

@@ -18,7 +18,6 @@ public class Driver implements Runnable {
         try {
             Thread.sleep(trafficDelay);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         if( orderForDelivery.getOrderStatus() != OrderStatus.TRASHED) {
