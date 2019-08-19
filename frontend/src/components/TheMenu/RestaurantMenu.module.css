@@ -9,12 +9,13 @@
     grid-gap: 2px;
     padding: 10px;
     grid-auto-rows: 24px;
+    overflow: auto;
 
 }
 /* All the direct decendents of menuGridContainer divs get this style */
 .menuGridContainer > div {
     background: #eee;
-    font-size: .4em;
+    font-size: .5em;
     /* padding-left: 2px;
     padding-right: 10px; */
     

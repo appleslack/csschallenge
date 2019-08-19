@@ -66,11 +66,11 @@ class RestaurantMonitor extends Component {
     return (
       <React.Fragment>
         <RestaurantMenu menu={this.state.menu}/>
-        <div className={classes.OrderShelfContainer}>
+        <div className={classes.OrderShelfArea}>
           {/* Note:  Break up shelfes into type */}
-          <OrderShelf className={classes.OrderShelf} type="HOT" shelfStats={this.state.shelfStats.hot}/>
-          <OrderShelf className={classes.OrderShelf} type="COLD" shelfStats={this.state.shelfStats.cold}/>
-          <OrderShelf className={classes.OrderShelf} type="FROZEN" shelfStats={this.state.shelfStats.frozen}/>
+          <OrderShelf className={classes.OrderShelf} type="Hot Shelf" shelfStats={this.state.shelfStats.hot}/>
+          <OrderShelf className={classes.OrderShelf} type="Cold Shelf" shelfStats={this.state.shelfStats.cold}/>
+          <OrderShelf className={classes.OrderShelf} type="Frozen" shelfStats={this.state.shelfStats.frozen}/>
         </div>
   
       </React.Fragment>

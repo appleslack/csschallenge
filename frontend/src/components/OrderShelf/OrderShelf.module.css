@@ -1,18 +1,48 @@
 
-.OrderShelfContainer {
+.OrderShelfArea {
     display: grid;
     grid-template-columns: repeat( 3, 1fr);
     grid-gap: 1em;
     grid-auto-rows: minmax(200px, auto);
-    background-color: lightblue;
     margin-left: 10px;
     margin-right: 10px;
+    text-align:  left;
+
 }
+
+.OrderShelfContainer > p {
+    font-size: .7em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+}
+
+
 
 /* .OrderShelfContainer > div {
     background-color: white;
 } */
 
 .OrderShelf {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    padding-left: 10px;
+    padding-right: 10px;
     background-color: white;
+    font-size: 10px;
+    
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-right-width: 1px;
+    border-right-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-left-width: 1px;
+    border-left-style: solid;
+}
+
+.OrderShelfItem {
+
 }

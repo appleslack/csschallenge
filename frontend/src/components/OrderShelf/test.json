@@ -1,0 +1,67 @@
+{
+    "frozen": [
+        {
+            "item": {
+                "name": "Strawberries",
+                "shelfLife": 500,
+                "decayRate": 0.05,
+                "shelfName": "frozen",
+                "deliveryShelf": "FROZEN"
+            },
+            "orderDate": 1566229125421,
+            "orderPreparedDate": 1566229126425,
+            "orderNumber": 200,
+            "normalizedDecay": 0.604,
+            "orderStatus": "PREPARED",
+            "itemName": "Strawberries"
+        },
+        {
+            "item": {
+                "name": "Cookie Dough",
+                "shelfLife": 600,
+                "decayRate": 0.15,
+                "shelfName": "frozen",
+                "deliveryShelf": "FROZEN"
+            },
+            "orderDate": 1566229126554,
+            "orderPreparedDate": 1566229127695,
+            "orderNumber": 205,
+            "normalizedDecay": 0.6416666666666667,
+            "orderStatus": "PREPARED",
+            "itemName": "Cookie Dough"
+        }
+    ],
+    "cold": [
+        {
+            "item": {
+                "name": "Milk",
+                "shelfLife": 252,
+                "decayRate": 0.15,
+                "shelfName": "cold",
+                "deliveryShelf": "COLD"
+            },
+            "orderDate": 1566229125691,
+            "orderPreparedDate": 1566229126692,
+            "orderNumber": 201,
+            "normalizedDecay": 0.14285714285714285,
+            "orderStatus": "PREPARED",
+            "itemName": "Milk"
+        },
+        {
+            "item": {
+                "name": "Coke",
+                "shelfLife": 240,
+                "decayRate": 0.25,
+                "shelfName": "cold",
+                "deliveryShelf": "COLD"
+            },
+            "orderDate": 1566229127148,
+            "orderPreparedDate": 1566229128433,
+            "orderNumber": 208,
+            "normalizedDecay": 0.029166666666666667,
+            "orderStatus": "PREPARED",
+            "itemName": "Coke"
+        }
+    ],
+    "hot": []
+}
