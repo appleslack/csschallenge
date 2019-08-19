@@ -1,10 +1,7 @@
 // jshint esversion:6
 
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Button from 'react-bootstrap/Button';
-import Badge from 'react-bootstrap/Badge';
 import Layout from './components/Layout/Layout';
 import RestaurantMonitor from './containers/RestaurantMonitor/RestaurantMonitor';
 

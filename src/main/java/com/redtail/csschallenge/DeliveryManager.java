@@ -52,7 +52,7 @@ public final class DeliveryManager {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,6 +88,24 @@ public final class DeliveryManager {
         return jsonString;
     }
 
+    public boolean anyOrdersOnShelves() {
+        boolean ordersOnShelves = false;
+        synchronized (hotShelf) {
+            if( hotShelf.hasOrdersOnShelf() ) {
+                return true;
+            }
+            else if( coldShelf.hasOrdersOnShelf()) {
+                return true;
+            }
+            else if( frozenShelf.hasOrdersOnShelf()) {
+                return true;
+            }
+            else if( overflowShelf.hasOrdersOnShelf()) {
+                return true;
+            }
+        }
+        return ordersOnShelves;
+    }
     /*
      * Iterate through orders on the given shelf and update their decay value.
      * Return orders that have a decay indicating they should be trashed (<=0)

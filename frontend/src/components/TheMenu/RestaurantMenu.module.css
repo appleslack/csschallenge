@@ -14,8 +14,9 @@
 }
 /* All the direct decendents of menuGridContainer divs get this style */
 .menuGridContainer > div {
-    background: #eee;
+    background: aliceblue;
     font-size: .5em;
+    font-weight: bold;
     /* padding-left: 2px;
     padding-right: 10px; */
     

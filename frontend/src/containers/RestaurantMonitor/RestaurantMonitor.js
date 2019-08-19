@@ -6,15 +6,13 @@ import RestaurantMenu from '../../components/TheMenu/RestaurantMenu';
 import OrderShelf from '../../components/OrderShelf/OrderShelf';
 import classes from '../../components/OrderShelf/OrderShelf.module.css';
 
-// import Modal from '../../components/UI/Modal/Modal';
-import StatusMonitor from '../../components/Monitors/StatusMonitor';
-
 class RestaurantMonitor extends Component {
+  
   constructor(props) {
-    console.log('CellarMonitor constructor');
 
     super(props);
     this.state = this.getInitialState();
+    this.eventSource = null;
   }
 
   getInitialState = () => {
@@ -37,20 +35,24 @@ class RestaurantMonitor extends Component {
 
     axios.get( 'http://localhost:8000/restaurant/shelfStats')
       .then( (response) => {
-        if( response.data.frozen.length != 0 ) {
-          response.data.frozen.map( (item) => {
-            console.log(item.item.name);
-          });
-        }
         this.setState( {shelfStats: response.data});
       });
-
-      console.log('RestaurantMonitor componentDidMount');
-
-    setTimeout( () => {
-      this.connectToRestaurant();
-    }, 1000);
-
+      
+      // Support Server-Send Events (SSE) to get periodic updates of the shelf stats
+      if( this.eventSource == null ) {
+        const eventSource = new EventSource('http://localhost:8000/restaurant/sse/shelfStats'); 
+        // eventSource.onopen = (event) => console.log('Async Open Received'); 
+        eventSource.onmessage = (event) => {
+          console.log( "SSE message received!");
+          const stats = JSON.parse(event.data); 
+          this.setState({shelfStats: stats});
+  
+          // this.state.profiles.push(profile);
+          // this.setState({profiles: this.state.profiles}); 
+        };
+        // eventSource.onerror = (event) => console.log('error', event);
+      }
+  
   }
 
   connectToRestaurant = () => {
@@ -67,10 +69,10 @@ class RestaurantMonitor extends Component {
           {/* Note:  Break up shelfes into type */}
           <OrderShelf className={classes.OrderShelf} type="Hot Shelf" shelfStats={this.state.shelfStats.hot}/>
           <OrderShelf className={classes.OrderShelf} type="Cold Shelf" shelfStats={this.state.shelfStats.cold}/>
-          <OrderShelf className={classes.OrderShelf} type="Frozen" shelfStats={this.state.shelfStats.frozen}/>
+          <OrderShelf className={classes.OrderShelf} type="Frozen Shelf" shelfStats={this.state.shelfStats.frozen}/>
         </div>
         <div className={classes.OrderShelfArea}>
-          <OrderShelf className={classes.OrderShelf} type="Overflow" shelfStats={this.state.shelfStats.overflow}/>
+          <OrderShelf className={classes.OrderShelf} type="Overflow Shelf" shelfStats={this.state.shelfStats.overflow}/>
         </div>
       </React.Fragment>
     );

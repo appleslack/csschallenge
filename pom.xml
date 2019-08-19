@@ -12,7 +12,7 @@
 	<artifactId>css-challenge</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Bistro! Restaurant project for CSS challenge</description>
 
 	<properties>
 		<java.version>1.8</java.version>

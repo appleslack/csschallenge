@@ -41,6 +41,10 @@ public class DeliveryShelf {
         ordersOnShelf = new ArrayList<>(capacity);
     }
 
+    public boolean hasOrdersOnShelf() {
+        return (ordersOnShelf.size() > 0 );
+    }
+    
     public Boolean addOrderToShelf( Order order ) {
         Boolean successful = false;
         synchronized( this.ordersOnShelf ) {
