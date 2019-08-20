@@ -17,7 +17,7 @@ public class Restaurant {
     
     private String name;
     // private DeliveryManager dm;
-    private Boolean restaurantOpen = false;
+    private boolean restaurantOpen = false;
     private HashMap<String, MenuItem> theMenu;
     private PeriodicTask orderSim = null;
 
@@ -119,6 +119,10 @@ public class Restaurant {
         return success;
     }
 
+    public boolean autoOrderStarted() {
+        return (orderSim != null);
+    }
+    
     // Given an item, ask the order manager for a new order.  Once the
     // order has been put on one of the outgoing shelves (via the Order Manager),
     // the delivery can be scheduled (via DeliveryScheduler)
@@ -152,5 +156,9 @@ public class Restaurant {
         this.orderItemWithName(itemName);
 
         return itemName;
+    }
+
+    public boolean getRestaurantOpen() {
+        return this.restaurantOpen;
     }
 }

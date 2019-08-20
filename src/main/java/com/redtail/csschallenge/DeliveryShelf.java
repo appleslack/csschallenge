@@ -45,8 +45,8 @@ public class DeliveryShelf {
         return (ordersOnShelf.size() > 0 );
     }
     
-    public Boolean addOrderToShelf( Order order ) {
-        Boolean successful = false;
+    public boolean addOrderToShelf( Order order ) {
+        boolean successful = false;
         synchronized( this.ordersOnShelf ) {
             if( this.ordersOnShelf.size() < this.capacity ) {
                 this.ordersOnShelf.add(order);

@@ -1,6 +1,7 @@
 package com.redtail.csschallenge.rest;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -13,10 +14,12 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /*
@@ -30,11 +33,45 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RestController
 public class RESTaurantController {
 
+    private static final String RESTAURANT_OPEN_STATE = "restaurantOpen";
+    private static final String AUTO_ORDERING_STARTED_STATE = "autoOrderingStarted";
+
     private static final String PERIODIC_ORDERING_COULD_NOT_BE_STARTED = "Periodic ordering could not be started";
     private static final String STARTED_PERIODIC_ORDERING = "Started";
     private static final String STOPPED_PERIODIC_ORDERING = "Stopped";
     private static final String PERIODIC_ORDERING_COULD_NOT_BE_STOPPED = "Periodic ordering could not be stopped (not started?)";
 
+    /*
+    * getRestaurantState
+    *
+    * Get the current state of the restaurant and anything necessary for the
+    * client frontend to display information as needed.  Should be the first
+    * client call into the restaurant to ensure it's open, for example.
+    *
+    * API Endpoint:  /restaurant/state
+    */
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping( 
+        value="/restaurant/state" ,
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public String getRestaurantState() {
+        HashMap<String, String> stateMap = new HashMap<>();
+        
+        stateMap.put(RESTAURANT_OPEN_STATE, Boolean.toString(Restaurant.sharedInstance().getRestaurantOpen()));
+        stateMap.put(AUTO_ORDERING_STARTED_STATE, Boolean.toString(Restaurant.sharedInstance().autoOrderStarted()));
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = null;
+        try {
+            jsonString = mapper.writeValueAsString(stateMap);
+        } catch (Exception e) {
+            System.out.println("Exception while writing JSON String: " + e);
+        }
+
+        return jsonString;
+    }
     /*
     * orderRandomItem
     * 
@@ -155,28 +192,14 @@ public class RESTaurantController {
     )
     public SseEmitter periodicShelfStatusInfo() {
         final SseEmitter emitter = new SseEmitter();
-        // ExecutorService service = Executors.newSingleThreadExecutor();
-        // service.execute(() -> {
-        //     try {
-        //         if( DeliveryManager.sharedInstance().anyOrdersOnShelves() == true) {
-        //             String jsonStats = DeliveryManager.sharedInstance().getShelfStatusInfo();
-        //             emitter.send(jsonStats);
-        //         }
-        //         Thread.sleep(2);
-        //     } catch (Exception e) {
-        //         e.printStackTrace();
-        //         emitter.completeWithError(e);
-        //         return;
-        //     }
-        // });
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if( DeliveryManager.sharedInstance().anyOrdersOnShelves() == true ) {
+                    // if( DeliveryManager.sharedInstance().anyOrdersOnShelves() == true ) {
                         String jsonStats = DeliveryManager.sharedInstance().getShelfStatusInfo();
                         emitter.send(jsonStats);
-                    }
+                    // }
                 } catch (Exception e) {
                 }
             }
@@ -211,4 +234,11 @@ public class RESTaurantController {
         }
         return null;
     }
+
+	// handle normal "Async timeout", to avoid logging warn messages every 30s per client...
+	@ExceptionHandler(value = AsyncRequestTimeoutException.class)  
+    public String asyncTimeout(AsyncRequestTimeoutException e) {  
+        return null; // "SSE timeout..OK";  
+    }
+
 }

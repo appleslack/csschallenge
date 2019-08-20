@@ -180,8 +180,8 @@ public final class DeliveryManager {
         return THE_INSTANCE;
     }
 
-    public Boolean placeOrderOnShelfForDelivery(Order order) {
-        Boolean successful = false;
+    public boolean placeOrderOnShelfForDelivery(Order order) {
+        boolean successful = false;
         DeliveryShelf shelf = null;
 
         DeliveryShelfType shelfType = order.getItem().getDefaultShelf();
@@ -208,7 +208,7 @@ public final class DeliveryManager {
             // For now, we'll synchronize on the DeliveryManager but we could also
             // do the same on each shelf. We'll see...
             synchronized (this) {
-                Boolean success = shelf.addOrderToShelf(order);
+                boolean success = shelf.addOrderToShelf(order);
                 if( success ) {
                     // We added order to its default shelf.  Note this in order:
                     order.setDeliveryShelf(shelf.shelfType());
@@ -223,8 +223,7 @@ public final class DeliveryManager {
                     }
                     if (!success) {
                         System.out.println("Could not add order to overflow shelf - it's FULL!");
-                        // TODO: Trash the order!
-                        
+                        order.setOrderStatus(OrderStatus.TRASHED);
                     }
                 }
             }
