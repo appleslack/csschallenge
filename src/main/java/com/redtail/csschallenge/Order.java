@@ -52,7 +52,11 @@ public class Order {
     }
 
     public void setOrderStatus( OrderStatus status ) {
+        if( this.status == OrderStatus.DELIVERED ) {
+            System.out.println( "This shouldn't happen!");
+        }
         this.status = status;
+
         System.out.println(this + ": Order status changed to " + status);
         if( status == OrderStatus.PREPARED ) {
             this.orderPreparedDate = new Date();

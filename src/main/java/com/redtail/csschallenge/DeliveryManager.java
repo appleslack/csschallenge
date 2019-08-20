@@ -157,19 +157,23 @@ public final class DeliveryManager {
 
     // When the kitchen is open we should start scheduling drivers
     public void startSchedulingDeliveries() {
-        driverThreadPool = Executors.newCachedThreadPool();
+        if( driverThreadPool == null ) {
+            driverThreadPool = Executors.newCachedThreadPool();
+        }
     }
 
     public void stopSchedulingDeliveries() {
         if (driverThreadPool != null) {
             driverThreadPool.shutdown();
+            driverThreadPool = null;
         }
     }
 
     public void scheduleDriverForOrder(Order order) {
-        // Driver driver = DriverFactory.newDriverForOrder(order);
-        // driverThreadPool.submit(driver);
-
+        if( driverThreadPool != null ) {
+            Driver driver = DriverFactory.driverForOrder(order);
+            driverThreadPool.submit(driver);
+        }
     }
 
     public static DeliveryManager sharedInstance() {
@@ -225,6 +229,13 @@ public final class DeliveryManager {
                 }
             }
         }
+        // Now that the kitchen has prepared the order, schedule a driver to deliver it.
+        // NOTE:  This is NOT per specification:  "Drivers should be dispatched to pick up each order as it is placed."
+        //        I'm waiting for the kitchen to prepare the order instead as I have a limited number
+        //        of chefs and I have a delay in the system for orders while being prepared (modeling a
+        //        more real-world reality).
+        scheduleDriverForOrder(order);
+
         return successful;
     }
 
@@ -236,7 +247,8 @@ public final class DeliveryManager {
     public void handleOrderFinished(Order order) {
         // Don't allow the order to be moved or modified in another thread here
         synchronized (order) {
-            if (order.getOrderStatus() == OrderStatus.TRASHED) {
+            if (order.getOrderStatus() == OrderStatus.TRASHED ||
+                order.getOrderStatus() == OrderStatus.DELIVERED ) {
                 // Remove from list of items in the trash to clean up.
                 DeliveryShelf shelf = null;
                 switch (order.getDeliveryShelf()) {
@@ -261,16 +273,5 @@ public final class DeliveryManager {
             }
 
         }
-    }
-
-    /*
-     * shelfStatusJSON Return a json formatted version the shelf status information
-     * and relevant order information for orders on each shelf:
-     *
-     * 
-     */
-    public String shelfStatusJSON() {
-
-        return "";
     }
 }

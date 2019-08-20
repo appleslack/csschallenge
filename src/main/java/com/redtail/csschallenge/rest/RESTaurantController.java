@@ -178,7 +178,6 @@ public class RESTaurantController {
                         emitter.send(jsonStats);
                     }
                 } catch (Exception e) {
-                    System.out.println( "Exception in SSE: " + e );
                 }
             }
         } , 2000, 2000, TimeUnit.MILLISECONDS);

@@ -10,16 +10,18 @@ public class Driver implements Runnable {
 
     public Driver(Order order, int delay ) {
         trafficDelay = delay;
+        orderForDelivery = order;
     }
 
     @Override
     public void run() {
 
         try {
-            Thread.sleep(trafficDelay);
+            Thread.sleep(trafficDelay*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         if( orderForDelivery.getOrderStatus() != OrderStatus.TRASHED) {
             orderForDelivery.setOrderStatus(OrderStatus.DELIVERED);
         }

@@ -70,16 +70,20 @@ public class Restaurant {
     // This starts the whole thing off by telling the order manager that it's
     // OK to take orders (if we're closed, then orders will be rejected).
     public void startTakingOrders() {
-
         this.restaurantOpen = true;
         System.out.println(getName() + " is now taking orders!");
+        
+        DeliveryManager.sharedInstance().startSchedulingDeliveries();
     }
 
-    // Stop taking any new individual orders (via the Restful API) and tell the
+    // Stop taking any new individual orders and tell the
     // test order scheduler to stop also (so we can see all orders become complete)
+    // Note:  This is not wired up at this time but the functionality works.
     public void stopTakingOrders() {
         this.restaurantOpen = false;
         System.out.println(getName() + " is no longer taking orders!");
+        
+        DeliveryManager.sharedInstance().stopSchedulingDeliveries();
     }
 
     // Start the automatic order processor 
