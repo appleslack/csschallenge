@@ -26,10 +26,8 @@ The frontend is a React UI (Javascript / JSX) that needs to run on port 3000 (if
 #### $ cd frontend
 #### $ npm update
 
-Once that's finished, bringing up the UI is easily done via:
+Once that's finished, bringing up the UI is easily done using npm.  This should automatically launch a browser - but if not just browse to http://localhost:3000.
 
 #### $ npm start
 
-Note:  I suggest you start the server before bringing up the UI but this is not entirely necessary.  It's just that the UI is a bit ugly in its default, unpopulated state :-)
-
-
+## Running the Bistro!
