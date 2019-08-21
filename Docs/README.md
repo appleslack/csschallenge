@@ -31,3 +31,23 @@ Once that's finished, bringing up the UI is easily done using npm.  This should 
 #### $ npm start
 
 ## Running the Bistro!
+
+When you first launch the Bistro! UI, a request is sent to the restaurant to obtain its current state.  If the restaurant is closed (currently only when the backend is not running), you'll see the following:
+
+![Restaurant Closed](UI1.png)
+
+In this state, the UI code will periodically poll the backend until it receives a response, after which the UI will be populated with both the restauran'ts Menu and the all of the shelve's current order information.
+
+The Menu is interactive.  To order an item, just hover over the item you'd like and click.  It won't be immediately obvious that the item has been ordered, but it'll eventuall show up on the correct shelf.
+
+To start auto ordering (using the Poisson distribution of 3.5 mean orders / second), press button on the top right of the UI ("Start Auto Ordering").  You'll see the shelves filling up fast as in the following image:
+
+![Orders filling up shelves](UI2.png)
+
+
+By default, I've increased the traffic delay for drivers.  I did this so you can see both the overflow shelf filling up and see orders being put into the trash (I don't have a trash bin, but you can see this in the server's console logs).  To modify the behavior back to the values in the specification, change the two parameters in csschallenge/DriverFactory.java: 
+
+    private static final int MIN_TRAFFIC_DELAY = 2;
+
+    private static final int MAX_TRAFFIC_DELAY = 10;
+
